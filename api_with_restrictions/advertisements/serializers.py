@@ -36,13 +36,11 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         # обратите внимание на `context` – он выставляется автоматически
         # через методы ViewSet.
         # само поле при этом объявляется как `read_only=True`
-
         '''Проверка количества открытых объявлений перед созданием'''
 
         open_advs_quantity = self.context["request"].user.advertisement_set.filter(status='OPEN')
-
-        if len(open_advs_quantity) >= 10:
-            raise ValidationError('У пользователя не может быть больше 10 открытых объявлений!')
+        if len(open_advs_quantity) >= 8:
+            raise ValidationError('У пользователя не может быть больше 8 открытых объявлений!')
 
         validated_data["creator"] = self.context["request"].user
         return super().create(validated_data)
@@ -51,5 +49,13 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         """Метод для валидации. Вызывается при создании и обновлении."""
 
         # TODO: добавьте требуемую валидацию
+
+        '''Проверка количества открытых объявлений + запроса замены статуса перед изменением: 
+        проверка обхода ограничения на количество объявлений'''
+
+        open_advs_quantity = self.context["request"].user.advertisement_set.filter(status='OPEN')
+
+        if "status" in data and data["status"] == "OPEN" and len(open_advs_quantity) >= 8:
+            raise ValidationError('У пользователя не может быть больше 8 открытых объявлений!')
 
         return data
