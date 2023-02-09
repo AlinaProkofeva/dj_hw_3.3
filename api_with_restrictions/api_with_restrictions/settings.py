@@ -73,12 +73,6 @@ TEMPLATES = [
     },
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ]
-}
-
 WSGI_APPLICATION = 'api_with_restrictions.wsgi.application'
 
 

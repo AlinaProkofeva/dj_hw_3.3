@@ -28,3 +28,12 @@ class Advertisement(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True
     )
+
+class Favourites(models.Model):
+    '''Избранное'''
+
+    advertisement = models.ForeignKey(Advertisement, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE)
+    added_at = models.DateTimeField(auto_now_add=True)
